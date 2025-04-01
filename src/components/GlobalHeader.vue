@@ -16,7 +16,12 @@
     </a-col>
     <a-col flex="120px">
       <div class="user-login-status">
-        <a-button type="primary" href="/user/login">Login</a-button>
+        <div v-if="loginUserStore.loginUser.id">
+          {{ loginUserStore.loginUser.userName ?? 'Anonymous' }}
+        </div>
+        <div v-else>
+          <a-button type="primary" href="/user/login">Login</a-button>
+        </div>
       </div>
     </a-col>
   </a-row>
@@ -28,7 +33,9 @@ import {h, ref} from 'vue';
 import {HomeOutlined} from '@ant-design/icons-vue';
 import {MenuProps} from 'ant-design-vue';
 import {useRouter} from "vue-router";
-
+import {useLoginUserStore} from "@/stores/user.ts";
+const loginUserStore = useLoginUserStore();
+loginUserStore.fetchLoginUser();
 
 const items = ref<MenuProps['items']>([
   {
@@ -61,7 +68,7 @@ const items = ref<MenuProps['items']>([
 const router = useRouter();
 // Highlight the selected item
 const current = ref<string[]>([]);
-router.afterEach((to, from, next)=> {
+router.afterEach((to, from, next) => {
   current.value = [to.path];
 })
 // Update route
