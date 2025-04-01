@@ -61,7 +61,7 @@ const items = ref<MenuProps['items']>([
 const router = useRouter();
 // Highlight the selected item
 const current = ref<string[]>([]);
-router.afterEach((to, _, _)=> {
+router.afterEach((to, from, next)=> {
   current.value = [to.path];
 })
 // Update route
