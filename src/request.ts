@@ -2,7 +2,7 @@ import axios from "axios";
 import {message} from "ant-design-vue";
 
 const myAxios = axios.create({
-    baseURL: "http://172.20.112.1:8080/api",
+    baseURL: "http://localhost:8080/api",
     timeout: 50000,
     withCredentials: true
 })
