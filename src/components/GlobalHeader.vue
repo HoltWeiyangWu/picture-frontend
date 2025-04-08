@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import {h, ref} from 'vue';
+import {computed, h, ref} from 'vue';
 import {HomeOutlined, LogoutOutlined} from '@ant-design/icons-vue';
 import {MenuProps, message} from 'ant-design-vue';
 import {useRouter} from "vue-router";
@@ -52,7 +52,7 @@ import {logout} from "@/api/userController.ts";
 const loginUserStore = useLoginUserStore();
 loginUserStore.fetchLoginUser();
 
-const items = ref<MenuProps['items']>([
+const fullMenu = [
   {
     key: '/',
     icon: () => h(HomeOutlined),
@@ -60,9 +60,9 @@ const items = ref<MenuProps['items']>([
     title: 'Home',
   },
   {
-    key: '/about',
-    label: 'About',
-    title: 'About',
+    key: '/admin/userManage',
+    label: 'Manage Users',
+    title: 'Manage Users',
   },
 
   {
@@ -77,7 +77,23 @@ const items = ref<MenuProps['items']>([
     ),
     title: 'Developer',
   },
-]);
+];
+
+// Filter out option to user management page based on user state
+const filterMenuItems = (menuItems = [] as MenuProps['items']) => {
+  const callback = (menuItem) => {
+    if (menuItem.key.startsWith('/admin')) {
+      const loginUser = loginUserStore.loginUser
+      if (!loginUser || loginUser.userRole !== 'admin') {
+        return false
+      }
+    }
+    return true
+  }
+  return menuItems?.filter(menuItem => callback(menuItem))
+}
+
+const items = computed<MenuProps['items']>(() => filterMenuItems(fullMenu))
 
 // Add router
 const router = useRouter();
