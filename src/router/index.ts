@@ -3,6 +3,8 @@ import HomePage from "@/pages/HomePage.vue";
 import UserLoginPage from "@/pages/UserLoginPage.vue";
 import UserRegisterPage from "@/pages/UserRegisterPage.vue";
 import UserManagePage from "@/pages/UserManagePage.vue";
+import NoAuthPage from "@/pages/NoAuthPage.vue";
+import ACCESS_ENUM from "@/access/accessEnum.ts";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,8 +27,17 @@ const router = createRouter({
     {
       path: '/admin/userManage',
       name: 'user manage',
-      component: UserManagePage
-    }
+      component: UserManagePage,
+      meta: {
+        access: ACCESS_ENUM.ADMIN,
+        // hideInMenuBar: true,
+      }
+    },
+    {
+      path: '/noAuth',
+      name: 'no authentication',
+      component: NoAuthPage,
+    },
   ],
 })
 

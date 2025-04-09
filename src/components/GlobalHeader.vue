@@ -48,6 +48,7 @@ import {MenuProps, message} from 'ant-design-vue';
 import {useRouter} from "vue-router";
 import {useLoginUserStore} from "@/stores/user.ts";
 import {logout} from "@/api/userController.ts";
+import hasAccess from "@/access/hasAccess.ts";
 
 const loginUserStore = useLoginUserStore();
 loginUserStore.fetchLoginUser();
@@ -79,24 +80,30 @@ const fullMenu = [
   },
 ];
 
-// Filter out option to user management page based on user state
-const filterMenuItems = (menuItems = [] as MenuProps['items']) => {
-  const callback = (menuItem) => {
-    if (menuItem.key.startsWith('/admin')) {
-      const loginUser = loginUserStore.loginUser
-      if (!loginUser || loginUser.userRole !== 'admin') {
-        return false
-      }
-    }
-    return true
+// Add router
+const router = useRouter();
+const menuToRouteItem = (menuItem: any) => {
+  return router.getRoutes().find(routeItem => routeItem.path === menuItem.key);
+}
+
+// Filter out option to user management page based on user state or meta =
+const filterCallback = (menuItem) => {
+  const routeItem = menuToRouteItem(menuItem);
+  if (routeItem?.meta?.hideInMenuBar) {
+    return false
   }
-  return menuItems?.filter(menuItem => callback(menuItem))
+  return hasAccess(loginUserStore.loginUser,
+      routeItem?.meta?.access as string)
+}
+
+// Takes a list of menu items, convert them to route items and
+const filterMenuItems = (menuItems = [] as MenuProps['items']) => {
+  return menuItems
+      .filter(menuItem => filterCallback(menuItem))
 }
 
 const items = computed<MenuProps['items']>(() => filterMenuItems(fullMenu))
 
-// Add router
-const router = useRouter();
 // Highlight the selected item
 const current = ref<string[]>([]);
 router.afterEach((to, from, next) => {
