@@ -1,9 +1,13 @@
 <script setup lang="ts">
 // Columns to show in a table
 import {computed, onMounted, reactive, ref} from "vue";
-import {deleteUser, listUserVoByPage} from "@/api/userController.ts";
+import {deleteUser, listUserVoByPage, updateUser} from "@/api/userController.ts";
+import {DeleteOutlined, EditOutlined, CheckOutlined, CloseOutlined} from "@ant-design/icons-vue"
 import {message} from "ant-design-vue";
+import { cloneDeep } from 'lodash-es';
+import type { UnwrapRef } from 'vue';
 import dayjs from "dayjs";
+import {useLoginUserStore} from "@/stores/user.ts";
 
 const columns = [
   {
@@ -35,7 +39,7 @@ const columns = [
     dataIndex: 'createTime',
   },
   {
-    title: 'Action',
+    title: 'Actions',
     key: 'action',
   }
 ]
@@ -102,6 +106,33 @@ const doDelete = async (id: string) => {
   }
 }
 
+const loginUserStore = useLoginUserStore()
+const editableData: UnwrapRef<Record<string, DataItem>> = reactive({});
+
+const doEdit = (key: string) => {
+  editableData[key] = cloneDeep(dataList.value.filter(item => key === item.id)[0]);
+};
+
+const doSave = async (id: string) => {
+  if (!id) {
+    return
+  }
+  Object.assign(dataList.value.filter(item => id === item.id)[0], editableData[id]);
+  const res = await updateUser(editableData[id]);
+  if (res.data.code === 0) {
+    message.success("Successfully updated user")
+    await fetchData()
+    await loginUserStore.fetchLoginUser()
+  } else {
+    message.error("Fail to update user: " + res.data.message)
+  }
+
+  delete editableData[id];
+};
+const doCancel = (key: string) => {
+  delete editableData[key];
+};
+
 </script>
 <template>
   <a-form layout="inline" :model="searchParams" @finish="doSearch">
@@ -116,30 +147,66 @@ const doDelete = async (id: string) => {
     </a-form-item>
   </a-form>
 
-  <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange" >
+  <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange" table-layout="fixed">
     <template #headerCell="{ column }">
     </template>
 
     <template #bodyCell="{column, record}">
-      <template v-if="column.dataIndex === 'userAvatar'">
-        <a-image :src="record.userAvatar" :width="120"/>
-      </template>
-      <template v-else-if="column.dataIndex === 'userRole'">
-        <div v-if="record.userRole === 'admin'">
-          <a-tag color="green">Admin</a-tag>
+
+      <template v-if="['userName', 'userAvatar', 'userProfile', 'userRole'].includes(column.dataIndex)">
+        <div>
+          <a-input v-if="editableData[record.id] && column.dataIndex != 'userRole'"
+            v-model:value="editableData[record.id][column.dataIndex]"
+          style="margin: -5px 0"/>
+          <a-radio-group
+              v-else-if="editableData[record.id] && column.dataIndex == 'userRole'"
+              v-model:value="editableData[record.id][column.dataIndex]"
+              button-style="solid">
+              <a-radio-button value="admin">Admin</a-radio-button>
+              <a-radio-button value="user">User</a-radio-button>
+          </a-radio-group>
+          <template v-else>
+            <template v-if="column.dataIndex === 'userAvatar'">
+              <a-image :src="record.userAvatar" :width="120"/>
+            </template>
+            <template v-if="column.dataIndex === 'userName'">
+              {{ record.userName }}
+            </template>
+            <template v-if="column.dataIndex === 'userProfile'">
+              {{ record.userProfile }}
+            </template>
+            <template v-else-if="column.dataIndex === 'userRole'">
+              <div v-if="record.userRole === 'admin'">
+                <a-tag color="green">Admin</a-tag>
+              </div>
+              <div v-else>
+                <a-tag color="blue">User</a-tag>
+              </div>
+            </template>
+          </template>
         </div>
-        <div v-else>
-          <a-tag color="blue">User</a-tag>
-        </div>
       </template>
+
+
       <template v-else-if="column.dataIndex === 'createTime'">
         {{dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss')}}
       </template>
       <template v-else-if="column.key === 'action'">
-        <a-popconfirm title="Confirm to delete this user?" @confirm="doDelete(record.id)">
-          <a-button danger >Delete</a-button>
-        </a-popconfirm>
+        <div>
+          <span v-if="editableData[record.id]">
+            <CheckOutlined @click="doSave(record.id)" style="margin-right: 20px"/>
+            <CloseOutlined @click="doCancel(record.id)"/>
+          </span>
+          <span v-else>
+            <EditOutlined @click="doEdit(record.id)" style="margin-right: 20px"/>
+          <a-popconfirm title="Confirm to delete this user?" @confirm="doDelete(record.id)" placement="topRight">
+            <DeleteOutlined v-if="record.id != loginUserStore.loginUser?.id" style="color: red;" />
+          </a-popconfirm>
+          </span>
+        </div>
       </template>
+
+
     </template>
   </a-table>
 </template>
