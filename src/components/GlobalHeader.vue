@@ -65,7 +65,16 @@ const fullMenu = [
     label: 'Manage Users',
     title: 'Manage Users',
   },
-
+  {
+    key: '/addPicture',
+    label: 'Add Picture',
+    title: 'Add Picture',
+  },
+  {
+    key: '/admin/pictureManage',
+    label: 'Manage Picture',
+    title: 'Manage Picture',
+  },
   {
     key: 'others',
     label: h(

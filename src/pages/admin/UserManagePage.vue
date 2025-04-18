@@ -196,11 +196,11 @@ const doCancel = (key: string) => {
       <template v-else-if="column.key === 'action'">
         <div>
           <span v-if="editableData[record.id]">
-            <CheckOutlined @click="doSave(record.id)" style="margin-right: 20px"/>
-            <CloseOutlined @click="doCancel(record.id)"/>
+            <CheckOutlined @click="doSave(record.id)" style="margin-right: 20px; color: dodgerblue"/>
+            <CloseOutlined @click="doCancel(record.id)" style="color: red"/>
           </span>
           <span v-else>
-            <EditOutlined @click="doEdit(record.id)" style="margin-right: 20px"/>
+            <EditOutlined @click="doEdit(record.id)" style="margin-right: 20px; color: dodgerblue"/>
           <a-popconfirm title="Confirm to delete this user?"
                         @confirm="doDelete(record.id)"
                         placement="topRight">
