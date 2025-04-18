@@ -6,6 +6,7 @@ import UserManagePage from "@/pages/admin/UserManagePage.vue";
 import NoAuthPage from "@/pages/NoAuthPage.vue";
 import ACCESS_ENUM from "@/access/accessEnum.ts";
 import AddPicturePage from "@/pages/AddPicturePage.vue";
+import PictureDetailPage from "@/pages/PictureDetailPage.vue";
 import PictureManagePage from "@/pages/admin/PictureManagePage.vue";
 
 const router = createRouter({
@@ -30,6 +31,12 @@ const router = createRouter({
       path: '/addPicture',
       name: 'Add picture',
       component: AddPicturePage
+    },
+    {
+      path: '/picture/:id',
+      name: 'picture details',
+      component: PictureDetailPage,
+      props: true,
     },
     {
       path: '/admin/userManage',

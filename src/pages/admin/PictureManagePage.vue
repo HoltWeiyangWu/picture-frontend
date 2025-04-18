@@ -139,7 +139,6 @@ const doDelete = async (id: string) => {
       <a-button type="primary" html-type="submit">Search</a-button>
     </a-form-item>
   </a-form>
-<a-flex justify="right"><a-button type="primary" href="/addPicture" target="_blank">Add picture</a-button></a-flex>
 <!--  Table to display data-->
   <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange"
            table-layout="fixed">
