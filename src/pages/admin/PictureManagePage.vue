@@ -1,10 +1,10 @@
 <script setup lang="ts">
 // Columns to show in a table
 import {computed, onMounted, reactive, ref} from "vue";
-import {deletePicture, listPictureByPage} from "@/api/pictureController.ts";
-import {DeleteOutlined, EditOutlined} from "@ant-design/icons-vue"
+import {deletePicture, listPictureByPage, reviewPicture} from "@/api/pictureController.ts";
 import {message} from "ant-design-vue";
 import dayjs from "dayjs";
+import {PIC_REVIEW_STATUS_ENUM, PIC_REVIEW_STATUS_MAP, PIC_REVIEW_STATUS_OPTIONS} from "@/constants/picture.ts";
 
 const columns = [
   {
@@ -46,6 +46,10 @@ const columns = [
   {
     title: 'Edit Time',
     dataIndex: 'editTime',
+  },
+  {
+    title: 'Review Info',
+    dataIndex: 'reviewMessage',
   },
   {
     title: 'Action',
@@ -104,6 +108,7 @@ const doSearch = () => {
   fetchData()
 }
 
+// Delete a picture by its id
 const doDelete = async (id: string) => {
   if (!id) {
     return
@@ -117,6 +122,25 @@ const doDelete = async (id: string) => {
   }
 }
 
+// Handle review status (either pass or reject)
+const handleReview = async (record: API.Picture, reviewStatus: number) => {
+  const reviewMessage = reviewStatus === PIC_REVIEW_STATUS_ENUM.PASS ? "Passed by admin" : "Rejected by admin"
+  const res = await reviewPicture({
+    id: record.id,
+    reviewMessage,
+    reviewStatus,
+  })
+  try {
+    if (res.data.code === 0) {
+      message.success("Successfully reviewed picture")
+      await fetchData()
+    } else {
+      message.error("Fail to reviewed picture: " + res.data.message)
+    }
+  } catch (e) {
+    message.error("Fail to reviewed picture: " + e.message)
+  }
+}
 </script>
 <template>
   <!--   Search bar to filter picture list-->
@@ -134,6 +158,13 @@ const doDelete = async (id: string) => {
                 style="min-width: 180px"
                 allow-clear
       />
+    </a-form-item>
+    <a-form-item label="Review Status">
+      <a-select v-model:value="searchParams.reviewStatus"
+               :option="PIC_REVIEW_STATUS_OPTIONS"
+                style="min-width: 180px"
+               placeholder="Review status"
+               allow-clear></a-select>
     </a-form-item>
     <a-form-item>
       <a-button type="primary" html-type="submit">Search</a-button>
@@ -168,18 +199,40 @@ const doDelete = async (id: string) => {
           </a-tag>
         </a-space>
       </template>
+      <template v-else-if="column.dataIndex === 'reviewMessage'">
+        <div><b>Status: </b> {{PIC_REVIEW_STATUS_MAP[record.reviewStatus]}}</div>
+        <div><b>Message: </b> {{record.reviewMessage}}</div>
+        <div><b>Reviewer: </b> {{record.reviewerId}}</div>
+      </template>
       <!--Operations for admins-->
       <template v-else-if="column.key === 'action'">
         <div>
           <a :href="`/addPicture/?id=${record.id}`"
-             target="_blank"
-             style="margin-right: 20px">
-            <EditOutlined/>
+             target="_blank">
+            <a-button type="link" style="">
+              Edit
+            </a-button>
           </a>
           <a-popconfirm title="Confirm to delete this picture?"
                         @confirm="doDelete(record.id)"
                         placement="topRight">
-            <DeleteOutlined style="color: red;"/>
+            <a-button danger >
+              Delete
+            </a-button>
+          </a-popconfirm>
+          <a-button v-if="record.reviewStatus !== PIC_REVIEW_STATUS_ENUM.PASS"
+                    type="link"
+                    @click="handleReview(record, PIC_REVIEW_STATUS_ENUM.PASS)">
+            Pass
+          </a-button>
+          <a-popconfirm title="Confirm to reject this picture?"
+                        @confirm="handleReview(record, PIC_REVIEW_STATUS_ENUM.REJECTED)"
+                        placement="topRight">
+
+            <a-button v-if="record.reviewStatus !== PIC_REVIEW_STATUS_ENUM.REJECTED"
+                      danger>
+              Reject
+            </a-button>
           </a-popconfirm>
         </div>
       </template>

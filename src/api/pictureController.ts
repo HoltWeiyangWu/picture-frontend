@@ -83,6 +83,20 @@ export async function listPictureVoByPage(
   });
 }
 
+export async function reviewPicture(
+    body: API.PictureReviewRequest,
+    options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean_>('/picture/review', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 export async function listPictureTagCategory(options?: { [key: string]: any }) {
   return request<API.BaseResponsePictureTagCategory>("/picture/tag_category", {
     method: "GET",
