@@ -223,6 +223,7 @@ declare namespace API {
 
   type PictureUploadRequest = {
     id?: number;
+    fileUrl?: string;
   };
 
   type PictureVO = {
@@ -242,10 +243,6 @@ declare namespace API {
     editTime?: string;
     updateTime?: string;
     creator?: UserVO;
-  };
-
-  type reviewPictureParams = {
-    pictureReviewRequest: PictureReviewRequest;
   };
 
   type testDownloadParams = {

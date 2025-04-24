@@ -1,8 +1,14 @@
 <template>
   <div id="addPicturePage">
     <h2 style="margin-bottom: 16px">{{route.query?.id ? 'Edit picture' : 'Create picture'}}</h2>
-
-    <PictureUpload :picture="picture" :onSuccess="onSuccess"/>
+    <a-tabs v-model:active-key="uploadType">
+      <a-tab-pane key="file" tab="File upload">
+        <PictureUpload :picture="picture" :onSuccess="onSuccess"/>
+      </a-tab-pane>
+      <a-tab-pane key="url" tab="Url upload" force-render>
+        <UrlPictureUpload :picture="picture" :onSuccess="onSuccess"/>
+      </a-tab-pane>
+    </a-tabs>
     <a-form v-if="picture" layout="vertical" :model="pictureForm" @finish="handleSubmit">
       <a-form-item name="name" label="Name">
         <a-input v-model:value="pictureForm.name" placeholder="Name here"></a-input>
@@ -31,10 +37,12 @@ import PictureUpload from "@/components/PictureUpload.vue";
 import {onMounted, reactive, ref} from "vue";
 import {message} from "ant-design-vue";
 import {editPicture, getPictureVoById, listPictureTagCategory} from "@/api/pictureController.ts";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import UrlPictureUpload from "@/components/UrlPictureUpload.vue";
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
+const uploadType = ref<'file' | 'url'>('file')
 /**
  * Successfully upload picture
  * @param newPicture
@@ -45,6 +53,7 @@ const onSuccess = (newPicture: API.PictureVO) => {
 
 }
 
+const router = useRouter();
 // Edit picture by submitting a picture form
 const handleSubmit = async (values: any) => {
   const pictureId = picture.value?.id;
