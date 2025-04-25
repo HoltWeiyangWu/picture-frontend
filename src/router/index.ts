@@ -8,6 +8,7 @@ import ACCESS_ENUM from "@/access/accessEnum.ts";
 import AddPicturePage from "@/pages/AddPicturePage.vue";
 import PictureDetailPage from "@/pages/PictureDetailPage.vue";
 import PictureManagePage from "@/pages/admin/PictureManagePage.vue";
+import AddPictureBatchPage from "@/pages/admin/AddPictureBatchPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,11 @@ const router = createRouter({
       path: '/addPicture',
       name: 'Add picture',
       component: AddPicturePage
+    },
+    {
+      path: '/addPicture/batch',
+      name: 'Add picture by patch',
+      component: AddPictureBatchPage
     },
     {
       path: '/picture/:id',

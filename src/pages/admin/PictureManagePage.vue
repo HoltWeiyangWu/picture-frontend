@@ -143,6 +143,7 @@ const handleReview = async (record: API.Picture, reviewStatus: number) => {
 }
 </script>
 <template>
+
   <!--   Search bar to filter picture list-->
   <a-form layout="inline" :model="searchParams" @finish="doSearch">
     <a-form-item label="Keyword">
@@ -170,6 +171,11 @@ const handleReview = async (record: API.Picture, reviewStatus: number) => {
       <a-button type="primary" html-type="submit">Search</a-button>
     </a-form-item>
   </a-form>
+
+  <a-space style="display: flex; justify-content: flex-end;" >
+    <a-button type="primary" href="/addPicture" target="_blank">+ Add Picture</a-button>
+    <a-button type="primary" href="/addPicture/batch" target="_blank" ghost>+ Generate Pictures</a-button>
+  </a-space>
 <!--  Table to display data-->
   <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange"
            table-layout="fixed">
