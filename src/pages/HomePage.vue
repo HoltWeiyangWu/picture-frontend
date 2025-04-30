@@ -11,7 +11,7 @@ const loading = ref(true)
 // Parameters for the search
 const searchParams = reactive<API.PictureQueryRequest>({
   current: 1,
-  pageSize: 12,
+  pageSize: 15,
   sortField: "createTime",
   sortOrder: "descend",
 })
@@ -125,7 +125,7 @@ const doClick = (picture : API.PictureVO) => {
       </a-space>
     </div>
     <!--    Picture list-->
-    <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 5, xxl: 6}"
+    <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 5, xxl: 5}"
             :data-source="dataList"
             :pagination="pagination"
             :loading="loading">

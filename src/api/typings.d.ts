@@ -11,6 +11,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListSpaceLevel = {
+    code?: number;
+    data?: SpaceLevel[];
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO = {
     code?: number;
     data?: LoginUserVO;
@@ -35,6 +41,18 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageSpace = {
+    code?: number;
+    data?: PageSpace;
+    message?: string;
+  };
+
+  type BaseResponsePageSpaceVO = {
+    code?: number;
+    data?: PageSpaceVO;
+    message?: string;
+  };
+
   type BaseResponsePageUserVO = {
     code?: number;
     data?: PageUserVO;
@@ -56,6 +74,18 @@ declare namespace API {
   type BaseResponsePictureVO = {
     code?: number;
     data?: PictureVO;
+    message?: string;
+  };
+
+  type BaseResponseSpace = {
+    code?: number;
+    data?: Space;
+    message?: string;
+  };
+
+  type BaseResponseSpaceVO = {
+    code?: number;
+    data?: SpaceVO;
     message?: string;
   };
 
@@ -86,6 +116,14 @@ declare namespace API {
   };
 
   type getPictureVOByIdParams = {
+    id: number;
+  };
+
+  type getSpaceByIdParams = {
+    id: number;
+  };
+
+  type getSpaceVOByIdParams = {
     id: number;
   };
 
@@ -141,6 +179,34 @@ declare namespace API {
     pages?: number;
   };
 
+  type PageSpace = {
+    records?: Space[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PageSpace;
+    searchCount?: PageSpace;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
+  type PageSpaceVO = {
+    records?: SpaceVO[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PageSpaceVO;
+    searchCount?: PageSpaceVO;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
   type PageUserVO = {
     records?: UserVO[];
     total?: number;
@@ -168,6 +234,7 @@ declare namespace API {
     picScale?: number;
     picFormat?: string;
     creatorId?: number;
+    spaceId?: number;
     createTime?: string;
     editTime?: string;
     updateTime?: string;
@@ -206,6 +273,8 @@ declare namespace API {
     reviewStatus?: number;
     reviewMessage?: string;
     reviewerId?: number;
+    spaceId?: number;
+    nullSpaceId?: boolean;
   };
 
   type PictureReviewRequest = {
@@ -231,6 +300,7 @@ declare namespace API {
     id?: number;
     fileUrl?: string;
     picName?: string;
+    spaceId?: number;
   };
 
   type PictureVO = {
@@ -245,6 +315,73 @@ declare namespace API {
     picHeight?: number;
     picScale?: number;
     picFormat?: string;
+    creatorId?: number;
+    spaceId?: number;
+    createTime?: string;
+    editTime?: string;
+    updateTime?: string;
+    creator?: UserVO;
+  };
+
+  type Space = {
+    id?: number;
+    spaceName?: string;
+    spaceLevel?: number;
+    maxSize?: number;
+    maxCount?: number;
+    totalSize?: number;
+    totalCount?: number;
+    creatorId?: number;
+    createTime?: string;
+    editTime?: string;
+    updateTime?: string;
+    isDeleted?: number;
+  };
+
+  type SpaceAddRequest = {
+    spaceName?: string;
+    spaceLevel?: number;
+  };
+
+  type SpaceEditRequest = {
+    id?: number;
+    spaceName?: string;
+  };
+
+  type SpaceLevel = {
+    value?: number;
+    text?: string;
+    maxSize?: number;
+    maxCount?: number;
+  };
+
+  type SpaceQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    id?: number;
+    spaceName?: string;
+    spaceLevel?: number;
+    creatorId?: number;
+  };
+
+  type SpaceUpdateRequest = {
+    id?: number;
+    spaceName?: string;
+    spaceLevel?: number;
+    maxSize?: number;
+    maxCount?: number;
+  };
+
+  type SpaceVO = {
+    id?: number;
+    spaceName?: string;
+    spaceLevel?: number;
+    maxSize?: number;
+    maxCount?: number;
+    totalSize?: number;
+    totalCount?: number;
     creatorId?: number;
     createTime?: string;
     editTime?: string;

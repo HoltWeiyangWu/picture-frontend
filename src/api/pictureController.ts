@@ -83,6 +83,20 @@ export async function listPictureVoByPage(
   });
 }
 
+export async function listPictureVoByPageWithCache(
+    body: API.PictureQueryRequest,
+    options?: { [key: string]: any }
+) {
+  return request<API.BaseResponsePagePictureVO>("/picture/list/page/vo/cache", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 export async function reviewPicture(
     body: API.PictureReviewRequest,
     options?: { [key: string]: any }

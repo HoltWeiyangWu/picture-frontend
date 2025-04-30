@@ -76,6 +76,11 @@ const fullMenu = [
     title: 'Manage Picture',
   },
   {
+    key: '/admin/spaceManage',
+    label: 'Manage Space',
+    title: 'Manage Space',
+  },
+  {
     key: 'others',
     label: h(
         'a',
