@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {computed, onMounted, reactive, ref} from "vue";
+import { onMounted, reactive, ref} from "vue";
 import {listPictureTagCategory, listPictureVoByPage} from "@/api/pictureController.ts";
 import {message} from "ant-design-vue";
-import {useRouter} from "vue-router";
+import PictureList from "@/components/PictureList.vue";
 
 const dataList = ref<API.PictureVO[]>([])
 const total = ref(0)
@@ -46,18 +46,11 @@ onMounted(() => {
   fetchData()
 })
 
-const pagination = computed(() => {
-  return {
-    current: searchParams.current ?? 1,
-    pageSize: searchParams.pageSize ?? 10,
-    total: total.value,
-    onChange: (page: number, pageSize: number) => {
-      searchParams.current = page;
-      searchParams.pageSize = pageSize;
-      fetchData();
-    }
-  }
-})
+const onPageChange = (page: number, pageSize: number) => {
+  searchParams.current = page;
+  searchParams.pageSize = pageSize;
+  fetchData();
+}
 
 // Update search parameters when searching
 const doSearch = () => {
@@ -84,14 +77,6 @@ const getTagCategoryOptions = async () => {
 onMounted(() => {
   getTagCategoryOptions()
 })
-
-
-const router = useRouter()
-const doClick = (picture : API.PictureVO) => {
-  router.push({
-    path: `picture/${picture.id}`
-  })
-}
 </script>
 
 <template>
@@ -125,32 +110,14 @@ const doClick = (picture : API.PictureVO) => {
       </a-space>
     </div>
     <!--    Picture list-->
-    <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4, xl: 5, xxl: 5}"
-            :data-source="dataList"
-            :pagination="pagination"
-            :loading="loading">
-      <template #renderItem="{ item :picture }">
-        <a-list-item style="padding: 0">
-          <a-card hoverable @click="doClick(picture)">
-            <template #cover>
-              <img :alt="picture.name" :src="picture.url" style="height: 180px; object-fit: cover"/>
-            </template>
-            <a-card-meta :title="picture.name">
-              <template #description>
-                <a-flex>
-                  <a-tag color="green">
-                    {{ picture.category ?? 'Default' }}
-                  </a-tag>
-                  <a-tag v-for="tag in picture.tags" :key="tag">
-                    {{ tag }}
-                  </a-tag>
-                </a-flex>
-              </template>
-            </a-card-meta>
-          </a-card>
-        </a-list-item>
-      </template>
-    </a-list>
+    <PictureList :data-list="dataList" :loading="loading"/>
+    <a-pagination
+        v-model:current="searchParams.current"
+        v-model:pageSize="searchParams.pageSize"
+        :total="total"
+        @change="onPageChange"
+        style="text-align: right"
+    />
   </div>
 </template>
 

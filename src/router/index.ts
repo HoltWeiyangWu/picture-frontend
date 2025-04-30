@@ -11,6 +11,7 @@ import PictureManagePage from "@/pages/admin/PictureManagePage.vue";
 import AddPictureBatchPage from "@/pages/admin/AddPictureBatchPage.vue";
 import SpaceManagePage from "@/pages/admin/SpaceManagePage.vue";
 import AddSpacePage from "@/pages/AddSpacePage.vue";
+import MySpacePage from "@/pages/MySpacePage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,12 @@ const router = createRouter({
       path: '/addSpace',
       name: 'Add space',
       component: AddSpacePage
+    },
+    {
+      // Middle page to allow routing
+      path: '/mySpace',
+      name: 'My space',
+      component: MySpacePage
     },
     {
       path: '/admin/userManage',

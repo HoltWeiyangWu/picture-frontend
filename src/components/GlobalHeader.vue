@@ -24,6 +24,12 @@
             </ASpace>
             <template #overlay>
               <a-menu>
+                <a-menu-item >
+                  <router-link to="/mySpace">
+                    <UserOutlined/>
+                    My Pictures
+                  </router-link>
+                </a-menu-item>
                 <a-menu-item @click="doLogout">
                   <LogoutOutlined/>
                   Logout
@@ -43,7 +49,7 @@
 
 <script setup lang="ts">
 import {computed, h, ref} from 'vue';
-import {HomeOutlined, LogoutOutlined} from '@ant-design/icons-vue';
+import {HomeOutlined, LogoutOutlined, UserOutlined} from '@ant-design/icons-vue';
 import {MenuProps, message} from 'ant-design-vue';
 import {useRouter} from "vue-router";
 import {useLoginUserStore} from "@/stores/user.ts";
