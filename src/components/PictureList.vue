@@ -1,22 +1,56 @@
 <script setup lang="ts">
 import {useRouter} from "vue-router";
+import {EditOutlined, DeleteOutlined} from "@ant-design/icons-vue";
+import {message} from "ant-design-vue";
+import {deletePicture} from "@/api/pictureController.ts";
 
 interface Props {
   dataList?: API.PictureVO[]
   loading?: boolean
+  showOp?: boolean
+  onReload?: () => void
 }
 
 const props = withDefaults(defineProps<Props>(), {
   dataList: ()=>[],
-  loading: false
+  loading: false,
+  showOp: false
 })
 
 const router = useRouter()
 const doClick = (picture : API.PictureVO) => {
   router.push({
-    path: `picture/${picture.id}`
+    path: `/picture/${picture.id}`
   })
 }
+
+const doEdit = (picture, e) => {
+  e.stopPropagation()
+  router.push({
+    path: `/addPicture`,
+    query: {
+      id: picture.id,
+      spaceId: picture.spaceId,
+    }
+  })
+}
+
+const doDelete = async (picture, e) => {
+  e.stopPropagation()
+  const id = picture.id
+  if (!id) {
+    return
+  }
+  const res = await deletePicture({id})
+  if (res.data.code === 0) {
+    message.success("Deleted successfully.")
+    // Reload the whole page
+    props?.onReload()
+  } else {
+    message.error("Failed to delete picture.")
+  }
+}
+
 </script>
 
 <template>
@@ -43,6 +77,16 @@ const doClick = (picture : API.PictureVO) => {
                 </a-flex>
               </template>
             </a-card-meta>
+            <template v-if="showOp" #actions>
+              <a-space @click="e=> doEdit(picture,e)">
+                <EditOutlined />
+                Edit
+              </a-space>
+              <a-space @click="e=> doDelete(picture,e)">
+                <DeleteOutlined/>
+                Delete
+              </a-space>
+            </template>
           </a-card>
         </a-list-item>
       </template>

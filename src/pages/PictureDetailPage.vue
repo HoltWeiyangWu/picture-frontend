@@ -56,6 +56,13 @@ const doDelete = async () => {
 const router = useRouter()
 const doEdit = () => {
   router.push(`/addPicture/?id=${props.id}`)
+  router.push({
+    path: `/addPicture`,
+    query: {
+      id: picture.value.id,
+      spaceId: picture.value.spaceId,
+    }
+  })
 }
 
 const doDownload = () => {
