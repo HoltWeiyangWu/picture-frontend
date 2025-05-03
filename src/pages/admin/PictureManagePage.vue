@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Columns to show in a table
 import {computed, onMounted, reactive, ref} from "vue";
-import {deletePicture, listPictureByPage, reviewPicture} from "@/api/pictureController.ts";
+import {deletePicture, listPictureByPage, listPictureTagCategory, reviewPicture} from "@/api/pictureController.ts";
 import {message} from "ant-design-vue";
 import dayjs from "dayjs";
 import {PIC_REVIEW_STATUS_ENUM, PIC_REVIEW_STATUS_MAP, PIC_REVIEW_STATUS_OPTIONS} from "@/constants/picture.ts";
@@ -142,6 +142,24 @@ const handleReview = async (record: API.Picture, reviewStatus: number) => {
     message.error("Fail to reviewed picture: " + e.message)
   }
 }
+
+const tagsOptions = ref<string[]>([])
+
+const getTagCategoryOptions = async () => {
+  const res = await listPictureTagCategory()
+  if (res.data.code === 0 && res.data.data) {
+    tagsOptions.value = (res.data.data.tagList ?? []).map((data:string) => {
+      return {
+        label: data,
+        value: data
+      }
+    })
+  }
+}
+onMounted(()=> {
+  getTagCategoryOptions()
+})
+
 </script>
 <template>
 
@@ -156,6 +174,7 @@ const handleReview = async (record: API.Picture, reviewStatus: number) => {
     <a-form-item label="Tags">
       <a-select v-model:value="searchParams.tags"
                 placeholder="Tags"
+                :options="tagsOptions"
                 mode="tags"
                 style="min-width: 180px"
                 allow-clear
@@ -163,7 +182,7 @@ const handleReview = async (record: API.Picture, reviewStatus: number) => {
     </a-form-item>
     <a-form-item label="Review Status">
       <a-select v-model:value="searchParams.reviewStatus"
-               :option="PIC_REVIEW_STATUS_OPTIONS"
+               :options="PIC_REVIEW_STATUS_OPTIONS"
                 style="min-width: 180px"
                placeholder="Review status"
                allow-clear></a-select>
@@ -173,7 +192,7 @@ const handleReview = async (record: API.Picture, reviewStatus: number) => {
     </a-form-item>
   </a-form>
 
-  <a-space style="display: flex; justify-content: flex-end;" >
+  <a-space style="display: flex; justify-content: flex-end; margin-top: 10px" >
     <a-button type="primary" href="/addPicture" target="_blank">+ Add Picture</a-button>
     <a-button type="primary" href="/addPicture/batch" target="_blank" ghost>+ Generate Pictures</a-button>
   </a-space>

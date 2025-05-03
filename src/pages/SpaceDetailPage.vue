@@ -71,9 +71,6 @@ onMounted(() => {
   <a-flex justify="space-between">
     <h2>{{space.spaceName}} (Private storage space)</h2>
     <a-space size="middle">
-      <a-button type="primary" :href="`/addPicture?spaceId=${space.id}`" target="_blank">
-        + Add Picture
-      </a-button>
       <a-tooltip :title="`Used storage ${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`">
         <a-progress
             type="circle"
@@ -81,6 +78,9 @@ onMounted(() => {
             :percent="((space.totalSize*100)/space.maxSize).toFixed(1)"
         />
       </a-tooltip>
+      <a-button type="primary" :href="`/addPicture?spaceId=${space.id}`" target="_blank">
+        + Add Picture
+      </a-button>
     </a-space>
   </a-flex>
   <!--    Picture list-->
