@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {getSpaceVoById} from "@/api/spaceController.ts";
 import {message} from "ant-design-vue";
 import {listPictureVoByPage} from "@/api/pictureController.ts";
 import {formatSize} from "@/utils";
 import PictureList from "@/components/PictureList.vue";
+import PictureSearchForm from "@/components/PictureSearchForm.vue";
 // Obtain information about current picture space
 interface Props {
   id: string | number
@@ -30,7 +31,7 @@ const total = ref(0)
 const loading = ref(true)
 
 // Parameters for the search
-const searchParams = reactive<API.PictureQueryRequest>({
+const searchParams = ref<API.PictureQueryRequest>({
   current: 1,
   pageSize: 15,
   sortField: "createTime",
@@ -44,12 +45,22 @@ const onPageChange = (page: number, pageSize: number) => {
   fetchData();
 }
 
+const onSearch = (newSearchParams : API.PictureQueryRequest) => {
+  searchParams.value = {
+    ...searchParams.value,
+    ...newSearchParams,
+    current: 1,
+  }
+  fetchData()
+}
+
+
 const fetchData = async () => {
   loading.value = true
   // Convert search parameters
   const params = {
     spaceId: props.id,
-    ...searchParams,
+    ...searchParams.value,
   }
   const res = await listPictureVoByPage(params)
   if (res.data.code === 0 && res.data.data) {
@@ -69,7 +80,7 @@ onMounted(() => {
 
 <template>
   <a-flex justify="space-between">
-    <h2>{{space.spaceName}} (Private storage space)</h2>
+    <h2>{{space.spaceName}}</h2>
     <a-space size="middle">
       <a-tooltip :title="`Used storage ${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`">
         <a-progress
@@ -83,6 +94,9 @@ onMounted(() => {
       </a-button>
     </a-space>
   </a-flex>
+
+  <PictureSearchForm class="search-form" :onSearch = "onSearch"/>
+
   <!--    Picture list-->
   <PictureList :data-list="dataList" :loading="loading" :showOp="true" :onReload="fetchData"/>
   <a-pagination
@@ -96,6 +110,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.search-form {
+  margin-bottom: 16px;
+}
 </style>
 
 
