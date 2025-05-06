@@ -245,6 +245,14 @@ declare namespace API {
     reviewTime?: string;
   };
 
+  type PictureEditByBatchRequest = {
+    pictureIdList?: number[];
+    spaceId?: number;
+    category?: string;
+    tags?: string[];
+    namingRule?: string;
+  };
+
   type PictureEditRequest = {
     id?: number;
     name?: string;
@@ -389,6 +397,10 @@ declare namespace API {
     editTime?: string;
     updateTime?: string;
     creator?: UserVO;
+  };
+
+  type testDeleteParams = {
+    filePath: string;
   };
 
   type testDownloadParams = {

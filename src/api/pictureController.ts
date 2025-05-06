@@ -29,6 +29,20 @@ export async function editPicture(
   });
 }
 
+export async function editPictureByBatch(
+    body: API.PictureEditByBatchRequest,
+    options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean>("/picture/edit/batch", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 export async function getPictureById(
   params: API.getPictureByIdParams,
   options?: { [key: string]: any }

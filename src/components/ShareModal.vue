@@ -25,7 +25,7 @@ defineExpose({
 </script>
 
 <template>
-  <a-modal v-model:visible="visible" title="Share picture" :footer="false" @cancel="closeModal">
+  <a-modal v-model:open="visible" title="Share picture" :footer="false" @cancel="closeModal">
     <h4>Copy link</h4>
     <a-typography-link copyable>
       {{link}}

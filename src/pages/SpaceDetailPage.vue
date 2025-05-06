@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {h, onMounted, ref} from "vue";
 import {getSpaceVoById} from "@/api/spaceController.ts";
 import {message} from "ant-design-vue";
 import {listPictureVoByPage} from "@/api/pictureController.ts";
 import {formatSize} from "@/utils";
 import PictureList from "@/components/PictureList.vue";
 import PictureSearchForm from "@/components/PictureSearchForm.vue";
+import BatchEditPictureModal from "@/components/BatchEditPictureModal.vue";
+import {EditOutlined} from "@ant-design/icons-vue";
 // Obtain information about current picture space
 interface Props {
   id: string | number
@@ -76,6 +78,14 @@ onMounted(() => {
   fetchSpaceDetail()
   fetchData()
 })
+
+const batchEditPictureModalRef = ref()
+const doBatchEdit = () => {
+  if (batchEditPictureModalRef.value) {
+    batchEditPictureModalRef.value.openModal()
+  }
+}
+
 </script>
 
 <template>
@@ -92,11 +102,13 @@ onMounted(() => {
       <a-button type="primary" :href="`/addPicture?spaceId=${space.id}`" target="_blank">
         + Add Picture
       </a-button>
+      <a-button :icon="h(EditOutlined)" @click="doBatchEdit">
+        Multiple edit
+      </a-button>
     </a-space>
   </a-flex>
 
   <PictureSearchForm class="search-form" :onSearch = "onSearch"/>
-
   <!--    Picture list-->
   <PictureList :data-list="dataList" :loading="loading" :showOp="true" :onReload="fetchData"/>
   <a-pagination
@@ -106,6 +118,12 @@ onMounted(() => {
       :show-total="()=> `Total: ${total} / ${space.maxCount}`"
       @change="onPageChange"
       style="text-align: right"
+  />
+  <BatchEditPictureModal
+      ref="batchEditPictureModalRef"
+      :spaceId="id"
+      :pictureList="dataList"
+      :onSuccess="fetchData"
   />
 </template>
 
