@@ -1,6 +1,6 @@
 <template>
   <div id="addPicturePage">
-    <h2 style="margin-bottom: 16px">{{route.query?.id ? 'Edit picture' : 'Create picture'}}</h2>
+    <h2 style="margin-bottom: 16px">{{ route.query?.id ? 'Edit picture' : 'Create picture' }}</h2>
     <a-typography-paragraph v-if="spaceId" type="secondary">
       Save to storage space with ID：<a :href="`/space/${spaceId}`" target="_blank">{{ spaceId }}</a>
     </a-typography-paragraph>
@@ -13,6 +13,12 @@
         <UrlPictureUpload :picture="picture" :spaceId="spaceId" :onSuccess="onSuccess"/>
       </a-tab-pane>
     </a-tabs>
+
+    <div v-if="picture" class="edit-bar">
+      <a-button :icon="h(EditOutlined)" @click="doEditPicture">Adjust picture</a-button>
+      <ImageCropper ref="imageCropperRef" :imageUrl="picture?.url" :picture="picture" :spaceId="spaceId"
+                    :onSuccess="onCropSuccess"/>
+    </div>
     <a-form v-if="picture" layout="vertical" :model="pictureForm" @finish="handleSubmit">
       <a-form-item name="name" label="Name">
         <a-input v-model:value="pictureForm.name" placeholder="Name here"></a-input>
@@ -24,13 +30,16 @@
       </a-form-item>
 
       <a-form-item name="category" label="Category">
-        <a-auto-complete v-model:value="pictureForm.category" placeholder="Category here" allow-clear :options="categoryOptions"/>
+        <a-auto-complete v-model:value="pictureForm.category" placeholder="Category here" allow-clear
+                         :options="categoryOptions"/>
       </a-form-item>
       <a-form-item name="tags" label="Tags">
-        <a-select v-model:value="pictureForm.tags" mode="tags" placeholder="Tags here" allow-clear :options="tagsOptions"/>
+        <a-select v-model:value="pictureForm.tags" mode="tags" placeholder="Tags here" allow-clear
+                  :options="tagsOptions"/>
       </a-form-item>
       <a-form-item>
-        <a-button type="primary" html-type="submit" style="width: 100%">{{route.query?.id ? 'Edit' : 'Create'}}</a-button>
+        <a-button type="primary" html-type="submit" style="width: 100%">{{ route.query?.id ? 'Edit' : 'Create' }}
+        </a-button>
       </a-form-item>
     </a-form>
   </div>
@@ -38,11 +47,13 @@
 
 <script lang="ts" setup>
 import PictureUpload from "@/components/PictureUpload.vue";
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, h, onMounted, reactive, ref} from "vue";
 import {message} from "ant-design-vue";
 import {editPicture, getPictureVoById, listPictureTagCategory} from "@/api/pictureController.ts";
 import {useRoute, useRouter} from "vue-router";
 import UrlPictureUpload from "@/components/UrlPictureUpload.vue";
+import ImageCropper from "@/components/ImageCropper.vue";
+import {EditOutlined} from "@ant-design/icons-vue";
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
@@ -59,7 +70,7 @@ const onSuccess = (newPicture: API.PictureVO) => {
 }
 
 const router = useRouter();
-const spaceId = computed(()=> {
+const spaceId = computed(() => {
   return route.query?.spaceId
 })
 // Edit picture by submitting a picture form
@@ -69,7 +80,7 @@ const handleSubmit = async (values: any) => {
     return
   }
   const res = await editPicture({
-    id : pictureId,
+    id: pictureId,
     spaceId: spaceId.value,
     ...values
   })
@@ -94,13 +105,13 @@ const tagsOptions = ref<string[]>([])
 const getTagCategoryOptions = async () => {
   const res = await listPictureTagCategory()
   if (res.data.code === 0 && res.data.data) {
-    tagsOptions.value = (res.data.data.tagList ?? []).map((data:string) => {
+    tagsOptions.value = (res.data.data.tagList ?? []).map((data: string) => {
       return {
         label: data,
         value: data
       }
     })
-    categoryOptions.value = (res.data.data.categoryList ?? []).map((data:string) => {
+    categoryOptions.value = (res.data.data.categoryList ?? []).map((data: string) => {
       return {
         label: data,
         value: data
@@ -135,10 +146,27 @@ const getOldPicture = async () => {
 onMounted(() => {
   getOldPicture()
 })
+
+// Edit picture
+const imageCropperRef = ref()
+const doEditPicture = () => {
+  if (imageCropperRef.value) {
+    imageCropperRef.value.openModal()
+  }
+}
+const onCropSuccess = (newPicture: API.PictureVO) => {
+  picture.value = newPicture
+}
+
 </script>
 <style scoped>
 #addPicturePage {
   max-width: 720px;
   margin: 0 auto;
 }
+#addPicturePage .edit-bar {
+  text-align: center;
+  margin: 16px 0;
+}
+
 </style>
