@@ -11,9 +11,39 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListSpace = {
+    code?: number;
+    data?: Space[];
+    message?: string;
+  };
+
+  type BaseResponseListSpaceCategoryAnalyseResponse = {
+    code?: number;
+    data?: SpaceCategoryAnalyseResponse[];
+    message?: string;
+  };
+
   type BaseResponseListSpaceLevel = {
     code?: number;
     data?: SpaceLevel[];
+    message?: string;
+  };
+
+  type BaseResponseListSpaceSizeAnalyseResponse = {
+    code?: number;
+    data?: SpaceSizeAnalyseResponse[];
+    message?: string;
+  };
+
+  type BaseResponseListSpaceTagAnalyseResponse = {
+    code?: number;
+    data?: SpaceTagAnalyseResponse[];
+    message?: string;
+  };
+
+  type BaseResponseListSpaceUserAnalyseResponse = {
+    code?: number;
+    data?: SpaceUserAnalyseResponse[];
     message?: string;
   };
 
@@ -80,6 +110,12 @@ declare namespace API {
   type BaseResponseSpace = {
     code?: number;
     data?: Space;
+    message?: string;
+  };
+
+  type BaseResponseSpaceUsageAnalyseResponse = {
+    code?: number;
+    data?: SpaceUsageAnalyseResponse;
     message?: string;
   };
 
@@ -353,6 +389,18 @@ declare namespace API {
     spaceLevel?: number;
   };
 
+  type SpaceCategoryAnalyseRequest = {
+    spaceId?: number;
+    queryPublic?: boolean;
+    queryAll?: boolean;
+  };
+
+  type SpaceCategoryAnalyseResponse = {
+    category?: string;
+    count?: number;
+    totalSize?: number;
+  };
+
   type SpaceEditRequest = {
     id?: number;
     spaceName?: string;
@@ -376,12 +424,66 @@ declare namespace API {
     creatorId?: number;
   };
 
+  type SpaceRankAnalyseRequest = {
+    topN?: number;
+  };
+
+  type SpaceSizeAnalyseRequest = {
+    spaceId?: number;
+    queryPublic?: boolean;
+    queryAll?: boolean;
+  };
+
+  type SpaceSizeAnalyseResponse = {
+    sizeRange?: string;
+    count?: number;
+  };
+
+  type SpaceTagAnalyseRequest = {
+    spaceId?: number;
+    queryPublic?: boolean;
+    queryAll?: boolean;
+  };
+
+  type SpaceTagAnalyseResponse = {
+    tag?: string;
+    count?: number;
+  };
+
   type SpaceUpdateRequest = {
     id?: number;
     spaceName?: string;
     spaceLevel?: number;
     maxSize?: number;
     maxCount?: number;
+  };
+
+  type SpaceUsageAnalyseRequest = {
+    spaceId?: number;
+    queryPublic?: boolean;
+    queryAll?: boolean;
+  };
+
+  type SpaceUsageAnalyseResponse = {
+    usedSize?: number;
+    maxSize?: number;
+    sizeUsageRatio?: number;
+    usedCount?: number;
+    maxCount?: number;
+    countUsageRatio?: number;
+  };
+
+  type SpaceUserAnalyseRequest = {
+    spaceId?: number;
+    queryPublic?: boolean;
+    queryAll?: boolean;
+    userId?: number;
+    timeDimension?: string;
+  };
+
+  type SpaceUserAnalyseResponse = {
+    period?: string;
+    count?: number;
   };
 
   type SpaceVO = {

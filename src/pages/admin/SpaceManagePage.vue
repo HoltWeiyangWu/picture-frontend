@@ -132,8 +132,14 @@ const doDelete = async (id: string) => {
     </a-form-item>
   </a-form>
 
-  <a-space style="display: flex; justify-content: flex-end;" >
+  <a-space style="display: flex; justify-content: flex-end; margin-top: 12px" >
     <a-button type="primary" href="/addSpace" target="_blank">+ Add Space</a-button>
+    <a-button type="primary" ghost href="/spaceAnalyse?queryPublic=1">
+      Analyse Public Space
+    </a-button>
+    <a-button type="primary" ghost href="/spaceAnalyse?queryAll=1">
+      Analyse All Space
+    </a-button>
   </a-space>
 <!--  Table to display data-->
   <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange"
@@ -164,13 +170,19 @@ const doDelete = async (id: string) => {
               Edit
             </a-button>
           </a>
-          <a-popconfirm title="Confirm to delete this space?"
-                        @confirm="doDelete(record.id)"
-                        placement="topRight">
-            <a-button danger >
-              Delete
-            </a-button>
-          </a-popconfirm>
+          <div>
+            <a-popconfirm title="Confirm to delete this space?"
+                          @confirm="doDelete(record.id)"
+                          placement="topRight">
+              <a-button danger >
+                Delete
+              </a-button>
+            </a-popconfirm>
+
+          </div>
+          <a-button type="link" :href="`/spaceAnalyse?spaceId=${record.id}`" target="_blank">
+            Analyse
+          </a-button>
 
         </div>
       </template>

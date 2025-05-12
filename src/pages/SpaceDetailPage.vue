@@ -7,7 +7,7 @@ import {formatSize} from "@/utils";
 import PictureList from "@/components/PictureList.vue";
 import PictureSearchForm from "@/components/PictureSearchForm.vue";
 import BatchEditPictureModal from "@/components/BatchEditPictureModal.vue";
-import {EditOutlined} from "@ant-design/icons-vue";
+import {EditOutlined, BarChartOutlined} from "@ant-design/icons-vue";
 // Obtain information about current picture space
 interface Props {
   id: string | number
@@ -105,6 +105,15 @@ const doBatchEdit = () => {
       <a-button :icon="h(EditOutlined)" @click="doBatchEdit">
         Multiple edit
       </a-button>
+      <a-button
+          type="primary"
+          ghost
+          :icon="h(BarChartOutlined)"
+          :href="`/spaceAnalyse?spaceId=${id}`"
+      >
+        Analyse
+      </a-button>
+
     </a-space>
   </a-flex>
 

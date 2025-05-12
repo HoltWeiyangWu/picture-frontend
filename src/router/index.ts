@@ -14,6 +14,7 @@ import AddSpacePage from "@/pages/AddSpacePage.vue";
 import MySpacePage from "@/pages/MySpacePage.vue";
 
 import SpaceDetailPage from "@/pages/SpaceDetailPage.vue";
+import SpaceAnalysePage from "@/pages/SpaceAnalysePage.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -52,6 +53,12 @@ const router = createRouter({
       path: '/space/:id',
       name: 'space details',
       component: SpaceDetailPage,
+      props: true,
+    },
+    {
+      path: '/spaceAnalyse',
+      name: 'space analyse',
+      component: SpaceAnalysePage,
       props: true,
     },
     {
