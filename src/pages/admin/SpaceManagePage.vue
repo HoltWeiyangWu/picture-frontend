@@ -133,7 +133,7 @@ const doDelete = async (id: string) => {
   </a-form>
 
   <a-space style="display: flex; justify-content: flex-end; margin-top: 12px" >
-    <a-button type="primary" href="/addSpace" target="_blank">+ Add Space</a-button>
+    <a-button type="primary" href="/addSpace">+ Add Space</a-button>
     <a-button type="primary" ghost href="/spaceAnalyse?queryPublic=1">
       Analyse Public Space
     </a-button>

@@ -99,7 +99,7 @@ const doBatchEdit = () => {
             :percent="((space.totalSize*100)/space.maxSize).toFixed(1)"
         />
       </a-tooltip>
-      <a-button type="primary" :href="`/addPicture?spaceId=${space.id}`" target="_blank">
+      <a-button type="primary" :href="`/addPicture?spaceId=${space.id}`" >
         + Add Picture
       </a-button>
       <a-button :icon="h(EditOutlined)" @click="doBatchEdit">

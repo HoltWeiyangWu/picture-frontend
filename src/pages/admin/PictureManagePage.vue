@@ -193,8 +193,8 @@ onMounted(()=> {
   </a-form>
 
   <a-space style="display: flex; justify-content: flex-end; margin-top: 10px" >
-    <a-button type="primary" href="/addPicture" target="_blank">+ Add Picture</a-button>
-    <a-button type="primary" href="/addPicture/batch" target="_blank" ghost>+ Generate Pictures</a-button>
+    <a-button type="primary" href="/addPicture" >+ Add Picture</a-button>
+    <a-button type="primary" href="/addPicture/batch" ghost>+ Generate Pictures</a-button>
   </a-space>
 <!--  Table to display data-->
   <a-table :columns="columns" :data-source="dataList" :pagination="pagination" @change="doTableChange"

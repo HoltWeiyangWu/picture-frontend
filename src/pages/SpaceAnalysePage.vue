@@ -40,7 +40,7 @@ const isAdmin = computed(() => {
       <span v-if="queryAll"> All storage space </span>
       <span v-else-if="queryPublic"> Public space </span>
       <span v-else>
-      <a :href="`/space/${spaceId}`" target="_blank">ID：{{ spaceId }}</a>
+      <a :href="`/space/${spaceId}`" >ID：{{ spaceId }}</a>
     </span>
     </h2>
     <a-row :gutter="[16, 16]">

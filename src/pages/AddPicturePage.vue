@@ -2,7 +2,7 @@
   <div id="addPicturePage">
     <h2 style="margin-bottom: 16px">{{ route.query?.id ? 'Edit picture' : 'Create picture' }}</h2>
     <a-typography-paragraph v-if="spaceId" type="secondary">
-      Save to storage space with ID：<a :href="`/space/${spaceId}`" target="_blank">{{ spaceId }}</a>
+      Save to storage space with ID：<a :href="`/space/${spaceId}`" >{{ spaceId }}</a>
     </a-typography-paragraph>
 
     <a-tabs v-model:active-key="uploadType">
