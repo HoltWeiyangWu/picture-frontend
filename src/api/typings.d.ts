@@ -47,6 +47,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListSpaceUserVO = {
+    code?: number;
+    data?: SpaceUserVO[];
+    message?: string;
+  };
+
   type BaseResponseLoginUserVO = {
     code?: number;
     data?: LoginUserVO;
@@ -116,6 +122,12 @@ declare namespace API {
   type BaseResponseSpaceUsageAnalyseResponse = {
     code?: number;
     data?: SpaceUsageAnalyseResponse;
+    message?: string;
+  };
+
+  type BaseResponseSpaceUser = {
+    code?: number;
+    data?: SpaceUser;
     message?: string;
   };
 
@@ -367,6 +379,7 @@ declare namespace API {
     editTime?: string;
     updateTime?: string;
     creator?: UserVO;
+    permissionList?: string[];
   };
 
   type Space = {
@@ -382,11 +395,13 @@ declare namespace API {
     editTime?: string;
     updateTime?: string;
     isDeleted?: number;
+    spaceType?: number;
   };
 
   type SpaceAddRequest = {
     spaceName?: string;
     spaceLevel?: number;
+    spaceType?: number;
   };
 
   type SpaceCategoryAnalyseRequest = {
@@ -422,6 +437,7 @@ declare namespace API {
     spaceName?: string;
     spaceLevel?: number;
     creatorId?: number;
+    spaceType?: number;
   };
 
   type SpaceRankAnalyseRequest = {
@@ -473,6 +489,21 @@ declare namespace API {
     countUsageRatio?: number;
   };
 
+  type SpaceUser = {
+    id?: number;
+    spaceId?: number;
+    userId?: number;
+    role?: string;
+    createTime?: string;
+    updateTime?: string;
+  };
+
+  type SpaceUserAddRequest = {
+    spaceId?: number;
+    userId?: number;
+    role?: string;
+  };
+
   type SpaceUserAnalyseRequest = {
     spaceId?: number;
     queryPublic?: boolean;
@@ -484,6 +515,29 @@ declare namespace API {
   type SpaceUserAnalyseResponse = {
     period?: string;
     count?: number;
+  };
+
+  type SpaceUserEditRequest = {
+    id?: number;
+    role?: string;
+  };
+
+  type SpaceUserQueryRequest = {
+    id?: number;
+    spaceId?: number;
+    userId?: number;
+    role?: string;
+  };
+
+  type SpaceUserVO = {
+    id?: number;
+    spaceId?: number;
+    userId?: number;
+    role?: string;
+    createTime?: string;
+    updateTime?: string;
+    userVO?: UserVO;
+    spaceVO?: SpaceVO;
   };
 
   type SpaceVO = {
@@ -498,6 +552,8 @@ declare namespace API {
     createTime?: string;
     editTime?: string;
     updateTime?: string;
+    spaceType?: number;
+    permissionList?: string[];
     creator?: UserVO;
   };
 

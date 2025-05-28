@@ -15,6 +15,7 @@ import MySpacePage from "@/pages/MySpacePage.vue";
 
 import SpaceDetailPage from "@/pages/SpaceDetailPage.vue";
 import SpaceAnalysePage from "@/pages/SpaceAnalysePage.vue";
+import SpaceUserManagePage from "@/pages/SpaceUserManagePage.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -71,6 +72,12 @@ const router = createRouter({
       path: '/mySpace',
       name: 'My space',
       component: MySpacePage
+    },
+    {
+      path: '/spaceUserManage/:id',
+      name: 'Manage user',
+      component: SpaceUserManagePage,
+      props: true,
     },
     {
       path: '/admin/userManage',

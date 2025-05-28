@@ -6,6 +6,7 @@ import {useRouter} from "vue-router";
 import {downloadImage, formatSize, roundToTwo} from "@/utils";
 import {DeleteOutlined, EditOutlined, DownloadOutlined} from "@ant-design/icons-vue";
 import {useLoginUserStore} from "@/stores/user.ts";
+import {SPACE_PERMISSION_ENUM} from "@/constants/space.ts";
 
 interface Props {
   id: string | number
@@ -14,15 +15,13 @@ interface Props {
 const props = defineProps<Props>()
 const picture = ref<API.PictureVO>({})
 
-const loginUserStore = useLoginUserStore()
-const canEdit = computed(() => {
-  const loginUser = loginUserStore.loginUser;
-  if (!loginUser.id) {
-    return false
-  }
-  const user = picture.value.user || {}
-  return loginUser.id === user.id || loginUser.userRole === 'admin'
-})
+function createPermissionChecker(permission: string) {
+  return computed(() => {
+    return (picture.value.permissionList ?? []).includes(permission)
+  })
+}
+const canEdit = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_EDIT)
+const canDelete = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_DELETE)
 
 // Obtain previous data
 const fetchPictureDetail = async () => {
@@ -131,7 +130,7 @@ onMounted(() => {
                     @click="doEdit">
             Edit
           </a-button>
-          <a-popconfirm v-if="canEdit"
+          <a-popconfirm v-if="canDelete"
                         title="Confirm to delete this picture?"
                         @confirm="doDelete"
                         placement="topRight">

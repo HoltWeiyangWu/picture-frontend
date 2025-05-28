@@ -6,7 +6,7 @@ import { formatSize} from "@/utils";
 
 import {message} from "ant-design-vue";
 import dayjs from "dayjs";
-import {SPACE_LEVEL_MAP, SPACE_LEVEL_OPTIONS} from "@/constants/space.ts";
+import {SPACE_LEVEL_MAP, SPACE_LEVEL_OPTIONS, SPACE_TYPE_MAP, SPACE_TYPE_OPTIONS} from "@/constants/space.ts";
 
 const columns = [
   {
@@ -20,6 +20,10 @@ const columns = [
   {
     title: 'Level',
     dataIndex: 'spaceLevel',
+  },
+  {
+    title: 'Type',
+    dataIndex: 'spaceType',
   },
   {
     title: 'Information',
@@ -127,6 +131,16 @@ const doDelete = async (id: string) => {
     <a-form-item label="Creator ID">
       <a-input v-model:value="searchParams.creatorId" placeholder="Creator ID here" allow-clear></a-input>
     </a-form-item>
+
+    <a-form-item label="Type" name="spaceType">
+      <a-select
+          v-model:value="searchParams.spaceType"
+          :options="SPACE_TYPE_OPTIONS"
+          placeholder="Space Type here"
+          style="min-width: 180px"
+          allow-clear
+      />
+    </a-form-item>
     <a-form-item>
       <a-button type="primary" html-type="submit">Search</a-button>
     </a-form-item>
@@ -150,6 +164,9 @@ const doDelete = async (id: string) => {
     <template #bodyCell="{column, record}">
       <template v-if="column.dataIndex === 'createTime'">
         {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
+      </template>
+      <template v-else-if="column.dataIndex === 'spaceType'">
+        <a-tag>{{ SPACE_TYPE_MAP[record.spaceType] }}</a-tag>
       </template>
       <template v-else-if="column.dataIndex === 'editTime'">
         {{ dayjs(record.editTime).format('YYYY-MM-DD HH:mm:ss') }}

@@ -73,7 +73,7 @@ const options = computed(() => {
 
 <template>
   <div class="space-rank-analyse">
-    <a-card title="Rank">
+    <a-card title="Rank (Top 10)">
       <v-chart :option="options" style="height: 320px; max-width: 100%" :loading="loading"/>
     </a-card>
   </div>

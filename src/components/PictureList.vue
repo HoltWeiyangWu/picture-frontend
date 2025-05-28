@@ -11,12 +11,16 @@ interface Props {
   loading?: boolean
   showOp?: boolean
   onReload?: () => void
+  canEdit?: boolean
+  canDelete?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   dataList: ()=>[],
   loading: false,
-  showOp: false
+  showOp: false,
+  canEdit: false,
+  canDelete: false,
 })
 
 const router = useRouter()
@@ -94,12 +98,12 @@ const doShare= (picture: API.PictureVO, e: Event) => {
                 <ShareAltOutlined/>
                 Share
               </a-space>
-              <a-space @click="e=> doEdit(picture,e)">
-                <EditOutlined />
+              <a-space v-if="canEdit" @click="e=> doEdit(picture,e)">
+                <EditOutlined/>
                 Edit
               </a-space>
-              <a-space @click="e=> doDelete(picture,e)">
-                <DeleteOutlined/>
+              <a-space v-if="canDelete" @click="e=> doDelete(picture,e)">
+                <DeleteOutlined />
                 Delete
               </a-space>
 

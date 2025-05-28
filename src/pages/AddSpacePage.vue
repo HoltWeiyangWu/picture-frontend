@@ -1,6 +1,6 @@
 <template>
   <div id="addSpacePage">
-    <h2 style="margin-bottom: 16px">{{route.query?.id ? 'Edit space' : 'Create space'}}</h2>
+    <h2 style="margin-bottom: 16px">{{route.query?.id ? 'Edit space' : 'Create space'}} -- {{SPACE_TYPE_MAP[spaceType]}}</h2>
     <a-form layout="vertical" :model="spaceForm" @finish="handleSubmit">
       <a-form-item name="name" label="Name">
         <a-input v-model:value="spaceForm.spaceName" placeholder="Name here"></a-input>
@@ -35,11 +35,11 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import {message} from "ant-design-vue";
 import {addSpace, getSpaceVoById, listSpaceLevels, updateSpace} from "@/api/spaceController.ts";
 
-import {SPACE_LEVEL_OPTIONS} from "@/constants/space.ts";
+import {SPACE_LEVEL_OPTIONS, SPACE_TYPE_ENUM, SPACE_TYPE_MAP} from "@/constants/space.ts";
 import {useRoute, useRouter} from "vue-router";
 import {formatSize} from "@/utils";
 
@@ -72,6 +72,7 @@ const handleSubmit = async () => {
   } else { // Create a space
     res = await addSpace({
       ...spaceForm,
+      spaceType: spaceType.value,
     })
   }
   // Record user state if editing is successful
@@ -106,6 +107,13 @@ const getOldSpace = async () => {
 onMounted(() => {
   fetchSpaceLevelList()
   getOldSpace()
+})
+
+const spaceType = computed(()=> {
+  if (route.query?.type) {
+    return Number(route.query.type)
+  }
+  return SPACE_TYPE_ENUM.PRIVATE
 })
 </script>
 <style scoped>
