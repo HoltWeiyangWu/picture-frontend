@@ -79,7 +79,7 @@ const doShare= (picture: API.PictureVO, e: Event) => {
         <a-list-item style="padding: 0">
           <a-card hoverable @click="doClick(picture)">
             <template #cover>
-              <img crossorigin="anonymous" :alt="picture.name" :src="picture.url" style="height: 180px; object-fit: cover"/>
+              <img :alt="picture.name" :src="picture.url" style="height: 180px; object-fit: cover"/>
             </template>
             <a-card-meta :title="picture.name">
               <template #description>

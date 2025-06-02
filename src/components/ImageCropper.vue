@@ -3,7 +3,7 @@
            @cancel="closeModal" width="550px">
     <vue-cropper
         ref="cropperRef"
-        :img="imageUrl"
+        :img="imageUrl+'?t='+new Date().getDate()"
         :autoCrop="true"
         :fixedBox="false"
         :centerBox="true"
