@@ -16,6 +16,7 @@ import MySpacePage from "@/pages/MySpacePage.vue";
 import SpaceDetailPage from "@/pages/SpaceDetailPage.vue";
 import SpaceAnalysePage from "@/pages/SpaceAnalysePage.vue";
 import SpaceUserManagePage from "@/pages/SpaceUserManagePage.vue";
+import UserDetailPage from "@/pages/user/UserDetailPage.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -35,9 +36,17 @@ const router = createRouter({
       component: UserRegisterPage
     },
     {
+      path: '/user/profile',
+      name: 'user detail',
+      component: UserDetailPage
+    },
+    {
       path: '/addPicture',
       name: 'Add picture',
-      component: AddPicturePage
+      component: AddPicturePage,
+      meta: {
+        access: ACCESS_ENUM.USER
+      }
     },
     {
       path: '/addPicture/batch',

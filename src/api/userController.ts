@@ -106,6 +106,19 @@ export async function logout(options?: { [key: string]: any }) {
   });
 }
 
+export async function editUser(
+    body: API.UserEditRequest,
+    options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseBoolean>("/user/profile", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
 
 export async function userRegister(
   body: API.UserRegisterRequest,
