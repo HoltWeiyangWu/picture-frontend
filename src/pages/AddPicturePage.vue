@@ -17,7 +17,7 @@
     <div v-if="picture" class="edit-bar">
       <a-button :icon="h(EditOutlined)" @click="doEditPicture">Adjust picture</a-button>
       <ImageCropper ref="imageCropperRef" :imageUrl="picture?.url" :picture="picture" :spaceId="spaceId"
-                    :onSuccess="onCropSuccess"/>
+                    :onSuccess="onCropSuccess" :space="space"/>
     </div>
     <a-form v-if="picture" layout="vertical" :model="pictureForm" @finish="handleSubmit">
       <a-form-item name="name" label="Name">
@@ -47,13 +47,14 @@
 
 <script lang="ts" setup>
 import PictureUpload from "@/components/PictureUpload.vue";
-import {computed, h, onMounted, reactive, ref} from "vue";
+import {computed, h, onMounted, reactive, ref, watchEffect} from "vue";
 import {message} from "ant-design-vue";
 import {editPicture, getPictureVoById, listPictureTagCategory} from "@/api/pictureController.ts";
 import {useRoute, useRouter} from "vue-router";
 import UrlPictureUpload from "@/components/UrlPictureUpload.vue";
 import ImageCropper from "@/components/ImageCropper.vue";
 import {EditOutlined} from "@ant-design/icons-vue";
+import {getSpaceVoById} from "@/api/spaceController.ts";
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
@@ -158,6 +159,23 @@ const onCropSuccess = (newPicture: API.PictureVO) => {
   picture.value = newPicture
 }
 
+const space = ref<API.SpaceVO>()
+
+// Get space info
+const fetchSpace = async () => {
+  if (spaceId.value) {
+    const res = await getSpaceVoById({
+      id: spaceId.value,
+    })
+    if (res.data.code === 0 && res.data.data) {
+      space.value = res.data.data
+    }
+  }
+}
+
+watchEffect(() => {
+  fetchSpace()
+})
 </script>
 <style scoped>
 #addPicturePage {
