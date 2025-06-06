@@ -15,8 +15,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-  preview: {
-    host: true,
-    allowedHosts: 'all'
+  server: {
+    allowedHosts: 'www.holtwywpicloud.me'
   }
 })
