@@ -13,7 +13,7 @@ export default class PictureEditWebSocket {
      * Initialise WebSocket connection
      */
     connect(): void {
-        const url = `ws://localhost:8080/api/ws/picture/edit?pictureId=${this.pictureId}`
+        const url = `ws://${import.meta.env.VITE_BASE_URL}/ws/picture/edit?pictureId=${this.pictureId}`
         this.socket = new WebSocket(url)
 
         // Add cookie
