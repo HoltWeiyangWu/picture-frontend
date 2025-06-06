@@ -16,6 +16,6 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: 'www.holtwywpicloud.me'
+    allowedHosts: 'all'
   }
 })
